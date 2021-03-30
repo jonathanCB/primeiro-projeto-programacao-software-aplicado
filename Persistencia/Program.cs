@@ -12,6 +12,7 @@ namespace Persistencia
     {
         static void Main(string[] args)
         {
+            //Jonathan
             MovieContext _context = new MovieContext();
 
             Genre g1 = new Genre()
