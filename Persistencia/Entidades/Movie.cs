@@ -13,9 +13,9 @@ namespace Persistencia.Entidades
         public decimal Gross { get; set; }
     
         public double Rating { get; set; }
-
         public int GenreID { get; set; }
         public virtual Genre Genre { get; set; }
+        public ICollection<ActorMovie> Characters { get; set; }
     }
 
 }
