@@ -12,6 +12,8 @@ namespace Persistencia
     {
         static void Main(string[] args)
         {
+           
+            /*
             MovieContext _context = new MovieContext();
 
             Genre g1 = new Genre()
@@ -87,6 +89,9 @@ namespace Persistencia
                 Console.WriteLine(String.Format("Titulo: {0} Diretor: {1} \n",
                      m.Title, m.Director));
             }
+            */
+
+            
 
         }
 
