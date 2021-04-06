@@ -115,7 +115,7 @@ namespace Persistencia.Migrations
             modelBuilder.Entity("Persistencia.Entidades.ActorMovie", b =>
                 {
                     b.HasOne("Persistencia.Entidades.Actor", "Actor")
-                        .WithMany()
+                        .WithMany("Characters")
                         .HasForeignKey("ActorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -140,6 +140,11 @@ namespace Persistencia.Migrations
                         .IsRequired();
 
                     b.Navigation("Genre");
+                });
+
+            modelBuilder.Entity("Persistencia.Entidades.Actor", b =>
+                {
+                    b.Navigation("Characters");
                 });
 
             modelBuilder.Entity("Persistencia.Entidades.Genre", b =>

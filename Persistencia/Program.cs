@@ -12,7 +12,7 @@ namespace Persistencia
     {
         static void Main(string[] args)
         {
-           
+            #region "codigo inserts e manipulacao no DB (comentado)"
             /*
             MovieContext _context = new MovieContext();
 
@@ -90,8 +90,46 @@ namespace Persistencia
                      m.Title, m.Director));
             }
             */
+            #endregion
 
-            
+            #region "Consultas (em uso)"
+            MovieContext context = new MovieContext();
+
+            Console.WriteLine("\n1.Listar o nome de todos personagens desempenhados" +
+                              " por um determinado ator,\nincluindo a informação de qual o filme\n");
+
+            var consulta1 = context.Characters
+                             .Where(c => c.ActorId == 9)
+                             .Select(c => new
+                             {
+                                 c.Actor.Name,
+                                 c.Character,
+                                 c.Movie.Title
+                             });
+
+            foreach (var elem in consulta1)
+            {
+                Console.WriteLine("Nome do ator: {0}\nPersonagem: {1}\nTitulo do filme: {2}\n",
+                                    elem.Name, elem.Character, elem.Title);
+            }
+
+            Console.WriteLine("\n2.Mostrar o nome de todos atores que desempenharam um " +
+                "determinado personagem\n(por exemplo, quais os atores que já atuaram como \"007\" ?)\n");
+
+            var consulta2 = context.Characters
+                            .Where(c => c.Character == "James Bond")
+                            .Select(c => new
+                            {
+                                c.Actor.Name,
+                                c.Character
+                            });
+
+            foreach(var elem in consulta2)
+            {
+                Console.WriteLine("Nome do Ator: {0}\nPersonagem: {1}\n", elem.Name, elem.Character);
+            }
+
+            #endregion
 
         }
 

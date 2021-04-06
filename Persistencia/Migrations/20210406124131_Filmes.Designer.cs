@@ -10,7 +10,7 @@ using Persistencia.Repositorio;
 namespace Persistencia.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20210405140335_Filmes")]
+    [Migration("20210406124131_Filmes")]
     partial class Filmes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -117,7 +117,7 @@ namespace Persistencia.Migrations
             modelBuilder.Entity("Persistencia.Entidades.ActorMovie", b =>
                 {
                     b.HasOne("Persistencia.Entidades.Actor", "Actor")
-                        .WithMany()
+                        .WithMany("Characters")
                         .HasForeignKey("ActorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -142,6 +142,11 @@ namespace Persistencia.Migrations
                         .IsRequired();
 
                     b.Navigation("Genre");
+                });
+
+            modelBuilder.Entity("Persistencia.Entidades.Actor", b =>
+                {
+                    b.Navigation("Characters");
                 });
 
             modelBuilder.Entity("Persistencia.Entidades.Genre", b =>
