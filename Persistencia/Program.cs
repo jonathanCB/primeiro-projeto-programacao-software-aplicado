@@ -58,7 +58,7 @@ namespace Persistencia
                 "personagem (por exemplo: qual o ator que realizou mais filmes como o 'agente 007') ");
 
             var a2 = from a in _context.Characters
-                     where a.Character == "Leia Organa"
+                     where a.Character == "James Bond"
                      group a by a.Actor.Name into grupo
                      select new
                      {
@@ -74,6 +74,12 @@ namespace Persistencia
                     Console.WriteLine("\n Nome do ator: {0}\n QtdFilmes: {1}", ator.Nome, ator.NroPersonagens);
                 } 
             };
+
+            //Mostrar todos os atores que desempenharam o personagem escolhido na ordem decrescente:
+            /*foreach (var ator in a2.OrderByDescending(a => a.NroPersonagens))
+            {
+                    Console.WriteLine("\n Nome do ator: {0}\n QtdFilmes: {1}", ator.Nome, ator.NroPersonagens);
+            };*/
 
             #endregion
         }
