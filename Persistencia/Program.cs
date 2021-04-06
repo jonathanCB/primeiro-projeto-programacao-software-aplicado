@@ -5,6 +5,7 @@ using System.Linq;
 
 using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace Persistencia
 {
@@ -36,6 +37,7 @@ namespace Persistencia
             #region Consulta 2
             Console.WriteLine("\n2 - Mostrar o nome de todos atores que desempenharam um determinado " +
                 "personagem (por exemplo, quais os atores que já atuaram como '007'?)");
+
             var a1 = from a in _context.Characters
                      where a.Character == "James Bond"
                      select new
@@ -49,6 +51,30 @@ namespace Persistencia
             {
                 Console.WriteLine("\n {0} estrelando {1} como {2}\n", ator.Title, ator.Name, ator.Character);
             }
+            #endregion
+
+            #region Consulta 3
+            Console.WriteLine("3 - Informar qual o ator desempenhou mais vezes um determinado " +
+                "personagem (por exemplo: qual o ator que realizou mais filmes como o 'agente 007') ");
+
+            var a2 = from a in _context.Characters
+                     where a.Character == "Leia Organa"
+                     group a by a.Actor.Name into grupo
+                     select new
+                     {
+                         Nome = grupo.Key,
+                         NroPersonagens = grupo.Count()
+                     };
+            int maisVezes = 0;
+            foreach (var ator in a2.OrderByDescending(a => a.NroPersonagens))
+            {
+                if(ator.NroPersonagens > maisVezes)
+                {
+                    maisVezes = ator.NroPersonagens;
+                    Console.WriteLine("\n Nome do ator: {0}\n QtdFilmes: {1}", ator.Nome, ator.NroPersonagens);
+                } 
+            };
+
             #endregion
         }
     }
