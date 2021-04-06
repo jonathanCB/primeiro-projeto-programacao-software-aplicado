@@ -13,16 +13,28 @@ namespace Persistencia
         static void Main(string[] args)
         {
             MovieContext _context = new MovieContext();
-            //TESTE
+
+            #region Consulta 1
+            Console.WriteLine("1 - Listar o nome de todos personagens desempenhados por um determinado " +
+                "ator (Carrie Fischer), incluindo a informação de qual o filme.");
+
+            var c1 = from c in _context.Characters
+                     where c.Actor.Name == "Carrie Fisher"
+                     select new
+                     {
+                         c.Character,
+                         c.Movie.Title
+
+                     };
             
-            /*1 - Listar o nome de todos personagens desempenhados por um
-            determinado ator, incluindo a informação de qual o filme.*/
-            Console.WriteLine("1 - Listar o nome de todos personagens desempenhados por um determinado ator, incluindo a informação de qual o filme.");
-            var characters = _context.Characters.Where(n => n.ActorId == 12);
-            foreach (ActorMovie personagensTomHanks in characters)
+            foreach (var personagens in c1)
             {
-                Console.WriteLine("\t{0}", personagensTomHanks.Character);
+                Console.WriteLine("{0}", personagens);
             }
+            #endregion
+
+            #region Consulta 2
+            #endregion
         }
     }
 }
