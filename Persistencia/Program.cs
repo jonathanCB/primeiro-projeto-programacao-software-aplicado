@@ -113,7 +113,7 @@ namespace Persistencia
                                     elem.Name, elem.Character, elem.Title);
             }
 
-            Console.WriteLine("\n2.Mostrar o nome de todos atores que desempenharam um " +
+            Console.WriteLine("\n2.Mostrar o nome de todos os atores que desempenharam um " +
                 "determinado personagem\n(por exemplo, quais os atores que já atuaram como \"007\" ?)\n");
 
             var consulta2 = context.Characters
@@ -128,6 +128,45 @@ namespace Persistencia
             {
                 Console.WriteLine("Nome do Ator: {0}\nPersonagem: {1}\n", elem.Name, elem.Character);
             }
+
+            Console.WriteLine("\n3.Informar qual o ator que desempenhou mais vezes um determinado personagem" +
+                "(por exemplo: qual o ator que realizou mais filmes como o “agente 007”)\n");
+
+            var consulta3 = context.Characters
+                           .Where(c => c.Character == "James Bond");
+
+            var consulta3_1 = from a in consulta3
+                              group a by a.Actor.Name into grp
+                              select new
+                              {
+                                  actor = grp.Key,
+                                  qtde = grp.Count()
+                              };              
+
+            foreach (var elem in consulta3_1)
+            {
+                Console.WriteLine("Ator: {0}  \t Numero de atuacoes: {1}\n", elem.actor, elem.qtde);
+            }
+
+            Console.WriteLine("\n4.Mostrar o nome e a data de nascimento do ator mais idoso e o mais novo\n");
+
+            var consulta4 = (from m in context.Actors
+                             select m.DateBirth).Max();
+
+            var consulta4_1 = (from m in context.Actors
+                              where m.DateBirth == consulta4
+                              select m.Name).FirstOrDefault();
+
+            var consulta4_2 = (from m in context.Actors
+                             select m.DateBirth).Min();
+
+            var consulta4_3 = (from m in context.Actors
+                              where m.DateBirth == consulta4_2
+                              select m.Name).FirstOrDefault();
+
+            Console.WriteLine("Nome do Ator:{0}   Data de nascimento:{1}" +
+                              "\nNome do Ator:{2}   Data de nascimento:{3}",
+                              consulta4_1, consulta4, consulta4_3, consulta4_2);
 
             #endregion
 
