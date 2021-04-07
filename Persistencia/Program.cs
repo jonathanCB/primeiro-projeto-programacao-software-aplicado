@@ -119,7 +119,7 @@ namespace Persistencia
                                  select a.Name).FirstOrDefault();
 
             Console.WriteLine("\n Nome do ator mais velho: {0}\n Data de nascimento: {1}",
-                atorMaisVelho, dataMenor);
+                atorMaisVelho, dataMenor.ToShortDateString());
 
             //Ator mais novo
             var dataMaior = (from a in _context.Actors
@@ -130,7 +130,7 @@ namespace Persistencia
                                 select a.Name).FirstOrDefault();
 
             Console.WriteLine("\n Nome do ator mais novo: {0}\n Data de nascimento: {1}",
-                atorMaisNovo, dataMaior);
+                atorMaisNovo, dataMaior.ToShortDateString());
 
             /*
             //Ator mais velho
