@@ -65,21 +65,34 @@ namespace Persistencia
                          Nome = grupo.Key,
                          NroPersonagens = grupo.Count()
                      };
-            int maisVezes = 0;
+            
+            //Primeira forma:
+            String nomeAtor = a2.FirstOrDefault().Nome;
+            int qtdVezesComoPersonagem = a2.FirstOrDefault().NroPersonagens;
+            Console.WriteLine("\n Nome do ator que realizou mais vezes o personagem: {0}\n " +
+                        "QtdFilmes: {1}", nomeAtor, qtdVezesComoPersonagem);
+
+            //Segunda forma:
+            /*int maisVezes = 0;
             foreach (var ator in a2.OrderByDescending(a => a.NroPersonagens))
             {
                 if(ator.NroPersonagens > maisVezes)
                 {
                     maisVezes = ator.NroPersonagens;
-                    Console.WriteLine("\n Nome do ator: {0}\n QtdFilmes: {1}", ator.Nome, ator.NroPersonagens);
-                } 
-            };
+                    Console.WriteLine("\n Nome do ator que realizou mais vezes o personagem: {0}\n " +
+                        "QtdFilmes: {1}", ator.Nome, ator.NroPersonagens);
+                }
+            };*/
 
             //Mostrar todos os atores que desempenharam o personagem escolhido na ordem decrescente:
             /*foreach (var ator in a2.OrderByDescending(a => a.NroPersonagens))
             {
                     Console.WriteLine("\n Nome do ator: {0}\n QtdFilmes: {1}", ator.Nome, ator.NroPersonagens);
             };*/
+
+            #endregion
+
+            #region Consulta 4
 
             #endregion
         }
