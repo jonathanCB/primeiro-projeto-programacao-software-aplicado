@@ -57,22 +57,35 @@ namespace Persistencia
             Console.WriteLine("3 - Informar qual o ator desempenhou mais vezes um determinado " +
                 "personagem (por exemplo: qual o ator que realizou mais filmes como o 'agente 007') ");
 
-            var a2 = from a in _context.Characters
+            var a2 = (from a in _context.Characters
                      where a.Character == "James Bond"
                      group a by a.Actor.Name into grupo
                      select new
                      {
                          Nome = grupo.Key,
                          NroPersonagens = grupo.Count()
-                     };
+                     })
+                     .OrderByDescending(a => a.NroPersonagens)
+                     .FirstOrDefault();
+
+            /*Primeira forma: Colocar o método .OrderByDescending e o .FirstOrDefault()
+            diretamente na consulta e mostrar.)*/
+            Console.WriteLine("\n Nome do ator que realizou mais vezes o personagem: {0}\n " +
+                        "QtdFilmes: {1}", a2.Nome, a2.NroPersonagens);
+
+            //------------------------------------------------------------------------------------------
             
-            //Primeira forma:
-            String nomeAtor = a2.FirstOrDefault().Nome;
+            /*Segunda forma: Tirar o o método .OrderByDescending e o .FirstOrDefault()
+            da consulta e trabalhar com variáveis.*/
+
+            /*String nomeAtor = a2.FirstOrDefault().Nome;
             int qtdVezesComoPersonagem = a2.FirstOrDefault().NroPersonagens;
             Console.WriteLine("\n Nome do ator que realizou mais vezes o personagem: {0}\n " +
-                        "QtdFilmes: {1}", nomeAtor, qtdVezesComoPersonagem);
+            "QtdFilmes: {1}", nomeAtor, qtdVezesComoPersonagem);*/
 
-            //Segunda forma:
+            //------------------------------------------------------------------------------------------
+            
+            //Terceira forma:
             /*int maisVezes = 0;
             foreach (var ator in a2.OrderByDescending(a => a.NroPersonagens))
             {
@@ -84,7 +97,9 @@ namespace Persistencia
                 }
             };*/
 
-            //Mostrar todos os atores que desempenharam o personagem escolhido na ordem decrescente:
+            //------------------------------------------------------------------------------------------
+            
+            //Quarta forma: Mostrar todos os atores que desempenharam o personagem escolhido na ordem decrescente:
             /*foreach (var ator in a2.OrderByDescending(a => a.NroPersonagens))
             {
                     Console.WriteLine("\n Nome do ator: {0}\n QtdFilmes: {1}", ator.Nome, ator.NroPersonagens);
@@ -93,7 +108,8 @@ namespace Persistencia
             #endregion
 
             #region Consulta 4
-
+            /*var a3 = from a in _context.Actors
+                where a.DateBirth*/
             #endregion
         }
     }
