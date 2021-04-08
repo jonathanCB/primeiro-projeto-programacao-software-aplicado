@@ -5,6 +5,7 @@ using System.Linq;
 
 using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace Persistencia
 {
@@ -113,6 +114,8 @@ namespace Persistencia
                                     elem.Name, elem.Character, elem.Title);
             }
 
+
+
             Console.WriteLine("\n2.Mostrar o nome de todos os atores que desempenharam um " +
                 "determinado personagem\n(por exemplo, quais os atores que já atuaram como \"007\" ?)\n");
 
@@ -129,24 +132,29 @@ namespace Persistencia
                 Console.WriteLine("Nome do Ator: {0}\nPersonagem: {1}\n", elem.Name, elem.Character);
             }
 
+
+
+
             Console.WriteLine("\n3.Informar qual o ator que desempenhou mais vezes um determinado personagem" +
                 "(por exemplo: qual o ator que realizou mais filmes como o “agente 007”)\n");
 
             var consulta3 = context.Characters
                            .Where(c => c.Character == "James Bond");
 
-            var consulta3_1 = from a in consulta3
+            var consulta3_1 = (from a in consulta3
                               group a by a.Actor.Name into grp
-                              select new
+                              select new 
                               {
                                   actor = grp.Key,
-                                  qtde = grp.Count()
-                              };              
+                                  qtde = grp.Count()                                  
+                              }).OrderByDescending (a => a.qtde).Take(1);              
 
             foreach (var elem in consulta3_1)
             {
-                Console.WriteLine("Ator: {0}  \t Numero de atuacoes: {1}\n", elem.actor, elem.qtde);
+                Console.WriteLine("Ator: {0}\nNumero de atuacoes: {1}\n", elem.actor, elem.qtde);
             }
+
+
 
             Console.WriteLine("\n4.Mostrar o nome e a data de nascimento do ator mais idoso e o mais novo\n");
 
@@ -154,20 +162,62 @@ namespace Persistencia
                              select m.DateBirth).Max();
 
             var consulta4_1 = (from m in context.Actors
+                               select m.DateBirth).Min();
+
+            var consulta4_2 = (from m in context.Actors
                               where m.DateBirth == consulta4
                               select m.Name).FirstOrDefault();
 
-            var consulta4_2 = (from m in context.Actors
-                             select m.DateBirth).Min();
-
             var consulta4_3 = (from m in context.Actors
-                              where m.DateBirth == consulta4_2
+                              where m.DateBirth == consulta4_1
                               select m.Name).FirstOrDefault();
 
             Console.WriteLine("Nome do Ator:{0}   Data de nascimento:{1}" +
-                              "\nNome do Ator:{2}   Data de nascimento:{3}",
-                              consulta4_1, consulta4, consulta4_3, consulta4_2);
-            //HHUHUHHUUH
+                              "\nNome do Ator:{2}   Data de nascimento:{3}\n",
+                              consulta4_3, consulta4_1, consulta4_2, consulta4);
+
+
+
+
+            Console.WriteLine("\n5.Mostrar o nome e a data de nascimento do ator mais idoso " +
+                                "e o mais novo de um determinado gênero");
+
+            String genero = "Action";
+            var consulta5 = (from cha in context.Characters
+                            .Include(m => m.Movie)
+                            .ThenInclude(g => g.Genre)
+                            .Include(a => a.Actor)
+                             where cha.Movie.Genre.Name == genero
+                             select cha.Actor.DateBirth).Max();
+
+            var consulta5_1 = (from cha in context.Characters
+                            .Include(m => m.Movie)
+                            .ThenInclude(g => g.Genre)
+                            .Include(a => a.Actor)
+                             where cha.Movie.Genre.Name == genero
+                             select cha.Actor.DateBirth).Min();
+
+            var consulta5_2 = (from a in context.Actors
+                               where a.DateBirth == consulta5
+                               select a.Name).FirstOrDefault();
+
+            var consulta5_3 = (from a in context.Actors
+                               where a.DateBirth == consulta5_1
+                               select a.Name).FirstOrDefault();
+
+            Console.WriteLine("\nMais jovem do genero de: {0}\nNome: {1}\nData de Nascimento: {2}\n" +
+                              "\nMais idoso do genero de: {3}\nNome: {4}\nData de Nascimento: {5}\n", 
+                                genero, consulta5_2, consulta5, genero, consulta5_3, consulta5_1);
+
+
+
+
+            Console.WriteLine("\n6.Mostrar o valor médio das avaliações dos filmes que um " +
+                                "determinado ator participou");
+
+            String ator = "Harrison Ford";
+            var consulta 6 = (from m in context.Characters
+                              .Include (a=>a,Movie))
 
             #endregion
 
