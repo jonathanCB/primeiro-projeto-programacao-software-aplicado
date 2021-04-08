@@ -17,7 +17,7 @@ namespace Persistencia
 
             #region Consulta 1
             Console.WriteLine(" 1 - Listar o nome de todos personagens desempenhados por um determinado " +
-                "ator (Carrie Fischer), incluindo a informação de qual o filme.");
+                "ator (Carrie Fischer), incluindo a informação de qual o filme.\n");
 
             var c1 = from c in _context.Characters
                      where c.Actor.Name == "Carrie Fisher"
@@ -27,16 +27,18 @@ namespace Persistencia
                          c.Character,
                          c.Movie.Title
                      };
+            int con1 = 1;
             foreach (var personagens in c1)
             {
-                Console.WriteLine("\n {0} estrelando {1} como {2}.\n", personagens.Title,
+                Console.WriteLine(" {0} - {1} estrelando {2} como {3}.", con1, personagens.Title,
                     personagens.Name, personagens.Character);
+                con1++;
             }
             #endregion
 
             #region Consulta 2
             Console.WriteLine("\n 2 - Mostrar o nome de todos atores que desempenharam um determinado " +
-                "personagem (por exemplo, quais os atores que já atuaram como '007'?)");
+                "personagem (por exemplo, quais os atores que já atuaram como '007'?)\n");
 
             var a1 = from a in _context.Characters
                      where a.Character == "James Bond"
@@ -47,14 +49,16 @@ namespace Persistencia
                          a.Character
                      };
 
+            int con2 = 0;
             foreach (var ator in a1)
             {
-                Console.WriteLine("\n {0} estrelando {1} como {2}.\n", ator.Title, ator.Name, ator.Character);
+                Console.WriteLine(" {0} - {1} estrelando {2} como {3}.", con2, ator.Title, ator.Name, ator.Character);
+                con2++;
             }
             #endregion
 
             #region Consulta 3
-            Console.WriteLine(" 3 - Informar qual o ator desempenhou mais vezes um determinado " +
+            Console.WriteLine("\n 3 - Informar qual o ator desempenhou mais vezes um determinado " +
                 "personagem (por exemplo: qual o ator que realizou mais filmes como o 'agente 007') ");
 
             var a2 = (from a in _context.Characters
@@ -161,6 +165,43 @@ namespace Persistencia
             Console.WriteLine("\n Nome do ator mais novo: {0}\n Data de nascimento: {1}",
                 a4.Nome, a4.DataNascimentoAtorMaisNovo);
             */
+            #endregion
+
+            #region Consulta 5
+            Console.WriteLine("\n 5 - Mostrar o nome e a data de nascimento do ator mais idoso " +
+                "e o mais novo de um determinado gênero.\n ");
+
+            String genero = "Action";
+            var youngActorBirthday = (from c in _context.Characters
+                             .Include(m => m.Movie)
+                             .ThenInclude(g => g.Genre)
+                             .Include(ac => ac.Actor)
+                              where c.Movie.Genre.Name == genero
+                              select c.Actor.DateBirth).Max();
+
+            String youngActorName = (from a in _context.Actors
+                                     where a.DateBirth == youngActorBirthday
+                                     select a.Name).FirstOrDefault();
+
+            Console.WriteLine(" Nome do ator mais jovem do gênero '{0}': {1}" +
+                "\n Data de nascimento: {2}", genero, youngActorName, 
+                    youngActorBirthday.ToShortDateString());
+
+            var oldActorBirthday = (from c in _context.Characters
+                                    .Include(m => m.Movie)
+                                    .ThenInclude(g => g.Genre)
+                                    .Include(a => a.Actor)
+                                    where c.Movie.Genre.Name == genero
+                                    select c.Actor.DateBirth).Min();
+
+            String oldActorName = (from a in _context.Actors
+                                   where a.DateBirth == oldActorBirthday
+                                   select a.Name).FirstOrDefault();
+
+            Console.WriteLine("\n Nome do ator mais idoso do gênero '{0}': {1}" +
+                "\n Data de nascimento: {2}", genero, oldActorName,
+                    oldActorBirthday.ToShortDateString());
+
             #endregion
         }
     }
