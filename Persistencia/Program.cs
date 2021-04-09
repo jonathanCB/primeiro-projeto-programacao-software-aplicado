@@ -216,8 +216,20 @@ namespace Persistencia
                                 "determinado ator participou");
 
             String ator = "Harrison Ford";
-            var consulta 6 = (from m in context.Characters
-                              .Include (a=>a,Movie))
+            var consulta6 = context.Actors
+                            .Where(a => a.Name == ator)
+                            .Select(b => b.ActorId).FirstOrDefault();
+
+            var consulta6_1 = (from m in context.Characters
+                              .Include(a => a.Movie)
+                              where m.ActorId == consulta6
+                              select m.Movie.Rating).Average();
+
+            
+            Console.WriteLine("\nMedia de avaliacoes dos filmes em que o ator {0} participou: {1}\n",
+                                ator, consulta6_1.ToString("#0.0"));
+            
+            
 
             #endregion
 
