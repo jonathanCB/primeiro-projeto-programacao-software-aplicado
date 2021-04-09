@@ -203,6 +203,22 @@ namespace Persistencia
                     oldActorBirthday.ToShortDateString());
 
             #endregion
+
+            #region Consulta 6
+            Console.WriteLine("\n 6 - Mostrar o valor médio das avaliações dos filmes " +
+                "que um determinado ator participou.\n ");
+
+            String actor = "Daniel Craig";
+            var averageAvaliation = (from aa in _context.Characters
+                                     where aa.Actor.Name == actor
+                                     select aa.Movie.Rating).Average();
+
+            Console.WriteLine(" Nome do ator: {0}\n Média de avaliações dos filmes que " +
+                "participou: {1}", actor, averageAvaliation.ToString("F"));
+
+            #endregion
+
+
         }
     }
 }
