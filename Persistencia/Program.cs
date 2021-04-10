@@ -216,20 +216,62 @@ namespace Persistencia
                                 "determinado ator participou");
 
             String ator = "Harrison Ford";
-            var consulta6 = context.Actors
-                            .Where(a => a.Name == ator)
-                            .Select(b => b.ActorId).FirstOrDefault();
-
-            var consulta6_1 = (from m in context.Characters
+            var consulta6 = (from m in context.Characters
                               .Include(a => a.Movie)
-                              where m.ActorId == consulta6
+                              where m.Actor.Name == ator
                               select m.Movie.Rating).Average();
 
             
             Console.WriteLine("\nMedia de avaliacoes dos filmes em que o ator {0} participou: {1}\n",
-                                ator, consulta6_1.ToString("#0.0"));
-            
-            
+                                ator, consulta6.ToString("#0.0"));
+
+
+
+
+            Console.WriteLine("\n7.Qual o elenco do filme PIOR avaliado?\n");
+
+            var consulta7 = (from m in context.Movies
+                             select m.Rating).Min();
+
+            var consulta7_1 = (from m in context.Movies
+                              where m.Rating == consulta7
+                              select m.MovieId).FirstOrDefault();
+
+            var consulta7_2 = from m in context.Characters
+                              .Include(a => a.Actor)
+                              where m.MovieId == consulta7_1
+                              select m.Actor.Name;
+
+            Console.WriteLine("elenco do filme com ID: {0}\ncom uma avaliacao de: {1}",
+                                consulta7_1, consulta7);
+            foreach (var elem in consulta7_2)
+            {
+                Console.WriteLine(elem);
+            }
+
+
+
+
+            Console.WriteLine("\n\n8.Qual o elenco do filme com o pior faturamento?\n");
+
+            var consulta8 = (from m in context.Movies
+                             select m.Gross).Min();
+
+            var consulta8_1 = (from m in context.Movies
+                               where m.Gross == consulta8
+                               select m.MovieId).FirstOrDefault();
+
+            var consulta8_2 = from m in context.Characters
+                              .Include(a => a.Actor)
+                              where m.MovieId == consulta8_1
+                              select m.Actor.Name;
+
+            Console.WriteLine("elenco do filme com ID: {0}\ncom o pior faturamento sendo de: {1}",
+                                consulta8_1, consulta8);
+            foreach (var elem in consulta8_2)
+            {
+                Console.WriteLine(elem);
+            }
 
             #endregion
 
