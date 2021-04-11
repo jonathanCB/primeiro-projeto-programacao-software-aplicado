@@ -49,7 +49,7 @@ namespace Persistencia
                          a.Character
                      };
 
-            int con2 = 0;
+            int con2 = 1;
             foreach (var ator in a1)
             {
                 Console.WriteLine(" {0} - {1} estrelando {2} como {3}.", con2, ator.Title, ator.Name, ator.Character);
@@ -208,7 +208,7 @@ namespace Persistencia
             Console.WriteLine("\n 6 - Mostrar o valor médio das avaliações dos filmes " +
                 "que um determinado ator participou.\n ");
 
-            String actor = "Daniel Craig";
+            String actor = "Carrie Fisher";
             var averageAvaliation = (from aa in _context.Characters
                                      where aa.Actor.Name == actor
                                      select aa.Movie.Rating).Average();
@@ -216,6 +216,28 @@ namespace Persistencia
             Console.WriteLine(" Nome do ator: {0}\n Média de avaliações dos filmes que " +
                 "participou: {1}", actor, averageAvaliation.ToString("F"));
 
+            #endregion
+
+            #region Consulta 7
+            Console.WriteLine("\n 7 - Qual o elenco do filme PIOR avaliado?.\n ");
+            var worstMovie = (from m in _context.Movies
+                              select m.Rating).Min();
+
+            var actors = from m in _context.Characters
+                         where m.Movie.Rating == worstMovie
+                         select m.Actor.Name;
+
+            /*Segunda opção de fazer, utilizando Include:
+            var teste = from m in _context.Characters
+                              .Include(a => a.Actor)
+                              where m.Movie.Rating == worstMovie
+                              select m.Actor.Name;*/
+
+            Console.WriteLine(" Elenco:\n");
+            foreach (var actorMovie in actors)
+            {
+                Console.WriteLine(" " + actorMovie);
+            }
             #endregion
 
 
