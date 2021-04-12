@@ -223,7 +223,11 @@ namespace Persistencia
             var worstMovie = (from m in _context.Movies
                               select m.Rating).Min();
 
-            var actors = from m in _context.Characters
+            var mName = (from m in _context.Movies
+                         where m.Rating == worstMovie
+                         select m.Title).FirstOrDefault();
+
+            var actorsWorstMovie = from m in _context.Characters
                          where m.Movie.Rating == worstMovie
                          select m.Actor.Name;
 
@@ -233,14 +237,37 @@ namespace Persistencia
                               where m.Movie.Rating == worstMovie
                               select m.Actor.Name;*/
 
+            Console.WriteLine(" Filme: {0}\n", mName);
+            Console.WriteLine(" Avaliação: {0}\n", worstMovie);
             Console.WriteLine(" Elenco:\n");
-            foreach (var actorMovie in actors)
+            foreach (var actorMovie in actorsWorstMovie)
             {
                 Console.WriteLine(" " + actorMovie);
             }
             #endregion
 
+            #region Consulta 8
+            Console.WriteLine("\n 8 - Qual o elenco do filme com o pior faturamento?\n ");
+            var gross = (from m in _context.Movies
+                              select m.Gross).Min();
 
+            var movieName = (from m in _context.Movies
+                             where m.Gross == gross
+                             select m.Title).FirstOrDefault();
+
+            var actorsMovie = from m in _context.Characters
+                         where m.Movie.Gross == gross
+                         select m.Actor.Name;
+
+            Console.WriteLine(" Filme: {0}\n", movieName);
+            Console.WriteLine(" Faturamento: {0}\n", gross);
+            Console.WriteLine(" Elenco:\n");
+            foreach (var actorMovie in actorsMovie)
+            {
+                Console.WriteLine(" " + actorMovie);
+            }
+
+            #endregion
         }
     }
 }
