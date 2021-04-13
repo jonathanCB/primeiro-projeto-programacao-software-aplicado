@@ -247,7 +247,7 @@ namespace Persistencia
             #endregion
 
             #region Consulta 8
-            Console.WriteLine("\n 8 - Qual o elenco do filme com o pior faturamento?\n ");
+            Console.WriteLine("\n 8 - Qual o elenco do filme com o pior faturamento??\n ");
             var gross = (from m in _context.Movies
                               select m.Gross).Min();
 
@@ -267,6 +267,34 @@ namespace Persistencia
                 Console.WriteLine(" " + actorMovie);
             }
 
+            #endregion
+
+            #region Consulta 9
+            Console.WriteLine("\n 9 - Quais os 3 filmes com maior faturamento, seu gênero e diretor?\n ");
+            using (MovieContext context = new MovieContext())
+            {
+                var betterMovies = (from m in context.Movies
+                              .Include(g => g.Genre)
+                                    orderby m.Gross
+                                    select new
+                                    {
+                                        m.Title,
+                                        m.Gross,
+                                        m.Genre.Name,
+                                        m.Director
+                                    }).OrderByDescending(m => m.Gross).Take(3);
+
+                int cont = 1;
+                foreach (var movie in betterMovies) 
+                {
+                    Console.WriteLine(" {0}º lugar", cont);
+                    Console.WriteLine(" Filme: {0}\n Faturamento: {1}\n Gênero: {2}\n Diretor: {3}\n", 
+                        movie.Title, movie.Gross, movie.Name, movie.Director);
+                    cont++;
+                }
+            }
+
+            
             #endregion
         }
     }
