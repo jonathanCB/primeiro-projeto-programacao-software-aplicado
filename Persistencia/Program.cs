@@ -296,6 +296,21 @@ namespace Persistencia
 
 
             #endregion
+            #region Consulta 10
+            Console.WriteLine("\n 10 - Qual o faturamento total de todos os filmes juntos?\n ");
+
+            var c10 = (from m in _context.Movies
+                      where m.Director == "Martin Campbell"  
+                      select m.Gross).Sum();
+            
+            
+
+            
+            Console.WriteLine("Os filmes do diretor Martin Campbell renderam um montante de {0}",c10); 
+            
+            
+
+            #endregion
         }
     }
 }
