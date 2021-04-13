@@ -10,8 +10,8 @@ using Persistencia.Repositorio;
 namespace Persistencia.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20210324231659_Criacao do BD")]
-    partial class CriacaodoBD
+    [Migration("20210407204751_CriacaoDb")]
+    partial class CriacaoDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

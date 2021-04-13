@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persistencia.Migrations
 {
-    public partial class CriacaodoBD : Migration
+    public partial class CriacaoDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
